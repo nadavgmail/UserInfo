@@ -12,7 +12,7 @@ function getAjax(url) {
         })
     });
 } 
-//
+
 function postAjax(url,dataOject) {
     return new Promise((resolve, reject) => {
         $.ajax({
