@@ -1,4 +1,5 @@
-﻿function getJSON(url) {
+﻿
+function getAjax(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
             url,
@@ -12,12 +13,31 @@
     });
 } 
 
+function postAjax(url,dataOject) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url,
+            type: "POST",
+            data: dataOject,
+            success: data => {
+                resolve(data);
+            },
+            error: err => {
+                reject(err);
+            }
+        })
+    });
+} 
+
+
+
+
 $(function () {
     $(".getIpInfo").on("click",async function () {
         
         const ip = $(this).data('ip');
         const url = `/users/IpInfo?ipAdress=${ip}`;
-        const data = await getJSON(url);
+        const data = await getAjax(url);
         $(".modal-body").html(data);
         $('#IPCardModelData').modal('show');
     });
@@ -51,10 +71,12 @@ $(function () {
 
 
     $(".deleteUser").on("click", async function () {
-        let geturl = `/users/DeleteConfirmedAajax/${this.id}`;
+        /*let geturl = `/users/DeleteConfirmedAajax/${this.id}`;*/
+        const url = "/users/DeleteConfirmedAajax";
         if (confirm("delete ?")) {
             try {
-                const data = await getJSON(geturl);
+               
+                const data = await postAjax(url, { id: this.id });
                 if (data.status === "fail") {
                     alert('cant delete user');
                     return;

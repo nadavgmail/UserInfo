@@ -23,7 +23,7 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-       
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -56,7 +56,7 @@
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
-        @Html.Hidden("PreviousId",Model.ID)
+        @Html.Hidden("PreviousId", Model.ID)
     </div>
 }
 
@@ -66,4 +66,45 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $.validator.addMethod("tzvalidation", function (value, element) {
+            let IDnum = String(value);
+            let incNum = 0;
+            let mone = 0;
+            IDnum = IDnum.trim();
+            if ((IDnum.length > 9) || (IDnum.length < 5))
+                return false;
+            if (isNaN(IDnum))
+                return false
+
+            // The number is too short - add leading 0000
+            if (IDnum.length < 9) {
+                while (IDnum.length < 9) {
+                    IDnum = '0' + IDnum;
+                }
+            }
+
+            // CHECK THE ID NUMBER
+            for (var i = 0; i < 9; i++) {
+                incNum = Number(IDnum.charAt(i));
+                incNum *= (i % 2) + 1;
+                if (incNum > 9)
+                    incNum -= 9;
+                mone += incNum;
+            }
+            if (mone % 10 == 0)
+                return true;
+            else
+                return false;
+
+        });
+
+
+        $.validator.unobtrusive.adapters.addBool('tzvalidation');
+
+
+    </script>
+
 }

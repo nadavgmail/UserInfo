@@ -21,21 +21,21 @@ namespace UserInfo.Controllers
         // GET: users
         public ActionResult Index()
         {
-            return View(db.users.ToList());
+            return View(db.users.ToList().OrderBy(u=>u.Name));
         }
 
-        public ActionResult getUserByName(string partName)
-        {
-            if (string.IsNullOrEmpty(partName))
-                return null;
-            var users = db.users.Where(u => u.Name.Contains(partName)).ToList();
-            if(users.Count == 0)
-            {
-                return View("DataNotFound", null, "could not find name");
-            }
-            return View("Index",users);
+        //public ActionResult getUserByName(string partName)
+        //{
+        //    if (string.IsNullOrEmpty(partName))
+        //        return null;
+        //    var users = db.users.Where(u => u.Name.Contains(partName)).ToList();
+        //    if(users.Count == 0)
+        //    {
+        //        return View("DataNotFound", null, "could not find name");
+        //    }
+        //    return View("Index",users);
 
-        }
+        //}
 
 
 
@@ -92,14 +92,16 @@ namespace UserInfo.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("index");
             }
             users users = db.users.Find(id);
-            string shortPhone = "0" + users.Phone.Split('-')[1];
+            
             if (users == null)
             {
-                return HttpNotFound();
+                //probebly someone delete the user RedirectT to the list
+                return RedirectToAction("index");
             }
+            string shortPhone = "0" + users.Phone.Split('-')[1];
             return View(new UserData() {ID = users.ID, Name = users.Name, IP= users.IP, Phone = shortPhone });
         }
         //Because the site is on https and the api is http the only way i could get data 
@@ -150,40 +152,49 @@ namespace UserInfo.Controllers
             }
             if (ModelState.IsValid)
             {
-                usersdata.Phone = "+972-" + usersdata.Phone.Remove(0, 1);
-                Users = new users() { ID = usersdata.ID, IP = usersdata.IP, Name = usersdata.Name, Phone = usersdata.Phone };
-                db.Entry(Users).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //widht postman we can ovveride the duplicate id logic using try catch
+                try
+                {
+                    usersdata.Phone = "+972-" + usersdata.Phone.Remove(0, 1);
+                    Users = new users() { ID = usersdata.ID, IP = usersdata.IP, Name = usersdata.Name, Phone = usersdata.Phone };
+                    db.Entry(Users).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", "something went wrong try again");
+                }
+                
             }
             return View(usersdata);
         }
 
         // GET: users/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            users users = db.users.Find(id);
-            if (users == null)
-            {
-                return HttpNotFound();
-            }
-            return View(users);
-        }
+        //public ActionResult Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    users users = db.users.Find(id);
+        //    if (users == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(users);
+        //}
 
-        // POST: users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            users users = db.users.Find(id);
-            db.users.Remove(users);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// POST: users/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(string id)
+        //{
+        //    users users = db.users.Find(id);
+        //    db.users.Remove(users);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         protected override void Dispose(bool disposing)
         {
@@ -193,7 +204,7 @@ namespace UserInfo.Controllers
             }
             base.Dispose(disposing);
         }
-
+        [HttpPost]
         public ActionResult DeleteConfirmedAajax(string id)
         {
             JsonResult result = new JsonResult();
