@@ -1,0 +1,27 @@
+﻿
+@model Dictionary<string, string>
+@{
+    Layout = null;
+}
+
+
+
+<div class="ipContainer">
+    @foreach (var item in Model)
+    {
+        if (!string.IsNullOrEmpty(Model[item.Key]))
+        {   
+            <div class="IpBox">
+                <div class="IpHeader">@item.Key</div>
+                <div class="IpContent">@item.Value</div>
+            </div>
+            
+        }
+    }
+
+
+</div>
+            
+        
+    
+

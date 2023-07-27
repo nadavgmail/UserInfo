@@ -1,0 +1,77 @@
+﻿@model IEnumerable<UserInfo.users>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<input type="search" placeholder="search users" class="form-control" />
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" id="userData">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="username">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @*@Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
+                <input type="button" id="@item.ID" class="deleteUser" value="delete" />
+                <input type="button" class="getIpInfo" data-ip="@item.IP" value="get ip information" />
+            </td>
+            
+        </tr>
+       
+        
+    }
+
+</table>
+<div class="modal" id="IPCardModelData" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ip data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script defer src="~/Scripts/users.js"></script>
