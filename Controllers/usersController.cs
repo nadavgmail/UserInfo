@@ -24,18 +24,7 @@ namespace UserInfo.Controllers
             return View(db.users.ToList().OrderBy(u=>u.Name));
         }
 
-        //public ActionResult getUserByName(string partName)
-        //{
-        //    if (string.IsNullOrEmpty(partName))
-        //        return null;
-        //    var users = db.users.Where(u => u.Name.Contains(partName)).ToList();
-        //    if(users.Count == 0)
-        //    {
-        //        return View("DataNotFound", null, "could not find name");
-        //    }
-        //    return View("Index",users);
-
-        //}
+       
 
 
 
@@ -170,31 +159,7 @@ namespace UserInfo.Controllers
             return View(usersdata);
         }
 
-        // GET: users/Delete/5
-        //public ActionResult Delete(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    users users = db.users.Find(id);
-        //    if (users == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(users);
-        //}
-
-        //// POST: users/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(string id)
-        //{
-        //    users users = db.users.Find(id);
-        //    db.users.Remove(users);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+      
 
         protected override void Dispose(bool disposing)
         {
