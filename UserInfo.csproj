@@ -196,7 +196,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\users.js" />
-    <Content Include="sqlScript\users.sql" />
+    <Content Include="sqlScript.txt" />
     <Content Include="UsersDb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsersDb.Context.cs</LastGenOutput>
